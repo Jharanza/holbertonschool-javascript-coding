@@ -10,7 +10,5 @@ fs.writeFile(filePath, data, 'utf-8', (err) => {
   if (err) {
     console.error(err);
     return;
-  } else {
-    console.log(data);
-  }
+  } 
 });
