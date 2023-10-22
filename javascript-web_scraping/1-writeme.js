@@ -9,5 +9,5 @@ const data = process.argv[3];
 fs.writeFile(filePath, data, 'utf-8', (err) => {
   if (err) {
     console.error(err);
-  } 
+  }
 });
