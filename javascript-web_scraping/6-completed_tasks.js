@@ -1,6 +1,6 @@
 #!/usr/bin/node
 
-const url = 'https://jsonplaceholder.typicode.com/todos';
+const url = process.argv[2];
 const request = require('request');
 
 request(url, (error, response, body) => {
@@ -23,4 +23,3 @@ request(url, (error, response, body) => {
   });
   console.log(completedTaskCount);
 });
-
