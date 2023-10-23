@@ -2,17 +2,27 @@
 
 const request = require('request');
 
-const movie = process.argv[2];
+const movieId = process.argv[2];
 
-const url = 'https://swapi-api.hbtn.io/api/films/:id';
+const url = 'https://swapi-api.hbtn.io/api/films/';
 
 request(url, (error, response, body) => {
   if (error) {
     console.error(error);
-  } else if (response.statusCode !== 200) {
-    console.log(`Code: ${response.statusCode}`);
   } else {
     const movie = JSON.parse(body);
-    console.log(movie.title);
+    for (const key in movie) {
+      if (movie.hasOwnProperty(key)) {
+	const value = movie[key];
+        for (const key1 in value) {
+          if (value.hasOwnProperty(key1)) {
+            const val = value[key1];
+            if (val['episode_id'] == movieId) {
+              console.log(val['title']);
+	    }
+	  }
+	}
+      }
+    }
   }
 });
