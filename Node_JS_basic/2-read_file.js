@@ -6,7 +6,7 @@ function countStudents(path) {
     const data = fs.readFileSync(path, 'utf8');
 
     // Divide el contenido del archivo en líneas
-    const lines = data.split('\n').filter(line => line.trim() !== '');
+    const lines = data.split('\n').filter((line) => line.trim() !== '');
 
     // Inicializa contadores para cada campo
     let totalStudents = 0;
@@ -18,20 +18,21 @@ function countStudents(path) {
     const sweList = [];
 
     // Procesa las líneas y cuenta los estudiantes en cada campo
-    lines.forEach(line => {
+    lines.forEach((line) => {
       const [firstName, lastName, age, field] = line.split(',');
+      const ageLastName = [lastName, age];
 
       // Verifica si el campo es 'CS' o 'SWE' y cuenta al estudiante en el campo correspondiente
       if (field === 'CS') {
-        csCount++;
+        csCount += 1;
         csList.push(firstName.trim());
       } else if (field === 'SWE') {
-        sweCount++;
+        sweCount += 1;
         sweList.push(firstName.trim());
       }
 
       // Cuenta el estudiante global
-      totalStudents++;
+      totalStudents += 1;
     });
 
     // Imprime los resultados
@@ -47,4 +48,3 @@ function countStudents(path) {
 
 // Exporta la función para que pueda ser utilizada en otros archivos
 module.exports = countStudents;
-
