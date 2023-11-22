@@ -19,8 +19,7 @@ function countStudents(path) {
 
     // Procesa las líneas y cuenta los estudiantes en cada campo
     lines.forEach((line) => {
-      const [firstName, lastName, age, field] = line.split(',');
-      const ageLastName = [lastName, age];
+      const [firstName, , , field] = line.split(',');
 
       // Verifica si el campo es 'CS' o 'SWE' y cuenta al estudiante en el campo correspondiente
       if (field === 'CS') {
@@ -34,14 +33,12 @@ function countStudents(path) {
       // Cuenta el estudiante global
       totalStudents += 1;
     });
-
     // Imprime los resultados
     console.log(`Number of students: ${totalStudents - 1}`);// without the header
     console.log(`Number of students in CS: ${csCount}. List: ${csList.join(', ')}`);
     console.log(`Number of students in SWE: ${sweCount}. List: ${sweList.join(', ')}`);
 
   } catch (error) {
-    // Lanza un error si no se puede cargar la base de datos
     throw new Error('Cannot load the database');
   }
 }
