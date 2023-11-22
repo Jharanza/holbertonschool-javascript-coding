@@ -37,7 +37,6 @@ function countStudents(path) {
     console.log(`Number of students: ${totalStudents - 1}`);// without the header
     console.log(`Number of students in CS: ${csCount}. List: ${csList.join(', ')}`);
     console.log(`Number of students in SWE: ${sweCount}. List: ${sweList.join(', ')}`);
-
   } catch (error) {
     throw new Error('Cannot load the database');
   }
