@@ -24,7 +24,7 @@ request(uri, (err, res, body) => {
       }
     });
 
-    const output = JSON.stringify(completedTask, null, 2);
+    const output = JSON.stringify(completedTask, null, 1);
     console.log(output);
   }
 });
