@@ -24,8 +24,7 @@ request(uri, (err, res, body) => {
       }
     });
 
-    // for (const userId in completedTask) console.log(`${userId}: ${completedTask[userId]}`);
-    const output = JSON.stringify(completedTask);
+    const output = JSON.stringify(completedTask, null, 2);
     console.log(output);
   }
 });
