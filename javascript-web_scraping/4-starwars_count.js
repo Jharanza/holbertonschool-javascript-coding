@@ -6,7 +6,7 @@
  * @moives data from the body response
  * @artillesInMovie count number of films where appear a character
  */
-const request = require('request')
+const request = require('request');
 
 const uri = process.argv[2];
 
@@ -20,7 +20,7 @@ request(uri, (err, res, body) => {
         count += 1;
       }
       return count;
-  }, 0);
-  console.log(antillesInMovie)
+    }, 0);
+    console.log(antillesInMovie);
   }
-})
+});
