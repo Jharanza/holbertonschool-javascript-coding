@@ -20,5 +20,5 @@
     <li>5. Create a more complex HTTP server using Node's HTTP module</li>
     <li>6. Create a small HTTP server using Express</li>
     <li>7. Create a more complex HTTP server using Express</li>
-    <li>8. Organize a complex HTTP server using Express</li>
+    <li>8. Organize a complex HTTP server using Express</li>    
 </ul>
