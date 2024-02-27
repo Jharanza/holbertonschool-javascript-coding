@@ -1,9 +1,9 @@
 #!/usr/bin/node
 /**
  * Prints in stdout an string argument
- * @str argument that will be displayed
+ * @param {string} str The string that will be displayed
  */
 
 module.exports = function displayMessage(str) {
-  console.log(str)
+  console.log(str);
 };
