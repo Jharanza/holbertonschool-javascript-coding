@@ -43,8 +43,8 @@ function countStudents(path) {
 
     // Display student information
     console.log(`Number of students: ${data.length}`);
-    console.log(`Number of students in CS: ${totalCS}. List ${CS.join(', ')}`);
-    console.log(`Number of students in SWE: ${totalSWE}. List ${SWE.join(', ')}`);
+    console.log(`Number of students in CS: ${totalCS}. List: ${CS.join(', ')}`);
+    console.log(`Number of students in SWE: ${totalSWE}. List: ${SWE.join(', ')}`);
   } catch (err) {
     throw new Error('Cannot load the database: ', err);
   }
