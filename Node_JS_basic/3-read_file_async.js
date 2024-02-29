@@ -5,37 +5,44 @@
 
 const fs = require('fs');
 
-function countStudents(path) {
+function countStudents(filePath) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf-8', (err, content) => {
+    fs.readFile(filePath, 'utf-8', (err, data) => {
       if (err) {
-        reject(new Error(`Cannot load the database: ${err.message}`));
+        reject(new Error(`Cannot load the database\n${err}`));
       } else {
-        const data = content.split('\n');
-        const students = data.slice(1).filter((line) => line.trim()); // Remove empty lines
+        try {
+          // Process the data
+          const lines = data.trim().split('\n').slice(1);
+          const countStudents = lines.length;
+          const studentsByField = {};
 
-        const CS = [];
-        let totalCS = 0;
-        const SWE = [];
-        let totalSWE = 0;
+          for (let i = 0; i < lines.length; i += 1) {
+            const studentLine = lines[i];
+            if (studentLine) {
+              const studentData = studentLine.split(',');
+              const firstName = studentData[0];
+              const field = studentData[3];
 
-        students.forEach((student) => {
-          const info = student.split(',');
-          const field = info[3];
-          if (field === 'CS') {
-            CS.push(info[0]);
-            totalCS += 1;
-          } else if (field === 'SWE') {
-            SWE.push(info[0]);
-            totalSWE += 1;
+              if (!studentsByField[field]) {
+                studentsByField[field] = { count: 0, students: [] };
+              }
+              studentsByField[field].count += 1;
+              studentsByField[field].students.push(firstName);
+            }
           }
-        });
 
-        console.log(`Number of students: ${students.length}`);
-        console.log(`Number of students in CS: ${totalCS}. List: ${CS.join(', ')}`);
-        console.log(`Number of students in SWE: ${totalSWE}. List: ${SWE.join(', ')}`);
-
-        resolve();
+          console.log(`Number of students: ${countStudents}`);
+          for (const field in studentsByField) {
+            if (studentsByField[field]) {
+              const { count, students } = studentsByField[field];
+              console.log(`Number of students in ${field}: ${count} List: ${students.join(', ')}`);
+            }
+          }
+          resolve(lines)
+        } catch (error) {
+          reject(new Error(`Error processing data: ${error}`));
+        }
       }
     });
   });
