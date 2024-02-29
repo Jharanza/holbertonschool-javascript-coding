@@ -1,52 +1,45 @@
 #!/usr/bin/env node
 /**
  * Reads a CSV file synchronously and displays information about students.
- *
- * @param {string} path The path to the CSV file.
- * @throws {Error} If there's an error reading the file or processing the data.
  */
-
 const fs = require('fs');
 
-function countStudents(path) {
+function countStudents(filePath) {
   try {
-    // Read the file content synchronously
-    const content = fs.readFileSync(path, 'utf-8');
-    // Split the lines into an array, omitting the header
-    const data = content.split('\n').slice(1);
+    const data = fs.readFileSync(filePath, 'utf-8');
 
-    // Ensure the file is not empty
-    if (data.length === 0) throw new Error('The data is empty');
+    const lines = data.trim().split('\n');
 
-    // Initialize student lists and counts
-    const CS = [];
-    const SWE = [];
-    let totalCS = 0;
-    let totalSWE = 0;
+    const studentCount = lines.length - 1;
+    const studentsByField = {};
 
-    // Iterate through each student record
-    data.forEach((line) => {
-      const info = line.split(',');
+    for (let i = 1; i < lines.length; i += 1) {
+      const line = lines[i];
 
-      const field = info[3];
-      const name = info[0];
+      if (line) {
+        const studentData = line.split(',');
 
-      // Count students by field
-      if (field === 'CS') {
-        CS.push(name);
-        totalCS += 1;
-      } else if (field === 'SWE') {
-        SWE.push(name);
-        totalSWE += 1;
+        const firstName = studentData[0];
+        const field = studentData[3];
+
+        if (!studentsByField[field]) {
+          studentsByField[field] = { count: 0, students: [] };
+        }
+        studentsByField[field].count += 1;
+        studentsByField[field].students.push(firstName);
       }
-    });
+    }
 
-    // Display student information
-    console.log(`Number of students: ${data.length}`);
-    console.log(`Number of students in CS: ${totalCS}. List: ${CS.join(', ')}`);
-    console.log(`Number of students in SWE: ${totalSWE}. List: ${SWE.join(', ')}`);
-  } catch (err) {
-    throw new Error('Cannot load the database: ', err);
+    console.log(`Number of students: ${studentCount}`);
+
+    for (const field in studentsByField) {
+      if (field in studentsByField) {
+        const { count, students } = studentsByField[field];
+        console.log(`Number of students in ${field}: ${count} List: ${students.join(', ')}`);
+      }
+    }
+  } catch (error) {
+    throw new Error('Cannot load the database');
   }
 }
 
