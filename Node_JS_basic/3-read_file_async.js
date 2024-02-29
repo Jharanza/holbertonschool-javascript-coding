@@ -25,13 +25,15 @@ async function countStudents(fileName) {
     console.log(`Number of students: ${students.length}`);
     for (const field in fields) {
       if (field) {
-        const filteredStudents = students.filter((student) => student[student.length - 1] === field);
+        const filteredStudents = students.filter(
+          (student) => student[student.length - 1] === field,
+        );
+
         const firstNames = filteredStudents.map((student) => student[0]);
-        console.log(`Number of students in ${field}: ${firstNames.length}. List: ${firstNames.join(', ')}`);
+        console.log(`Number of students in ${
+          field}: ${firstNames.length}. List: ${firstNames.join(', ')}`);
       }
     }
-
-    return students; // Optional: return the processed students data
   } catch (error) {
     console.error(error.message);
   }
