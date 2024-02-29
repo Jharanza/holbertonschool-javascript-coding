@@ -3,28 +3,14 @@
  * Execute a program through the command line or a pipeline
  * @param {string} input data from the input
  */
-const readline = require('readline');
+process.stdin.setEncoding('utf8');
 
-const isTesting = process.env.NODE_ENV === 'test';
+console.log('Welcome to Holberton School, what is your name?');
 
-const { isTTY } = process.stdin;
+process.stdin.on('readable', () => {
+  const name = process.stdin.read();
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  if (name) process.stdout.write(`Your name is: ${name}`);
+});
 
-if (isTTY) {
-  rl.question('Welcome to Holberton School, what is your name?\n', (input) => {
-    console.log(`Your name is: ${input}`);
-    rl.close();
-  });
-} else {
-  rl.write('Welcome to Holberton School, what is your name?\n');
-  let input = '';
-  process.stdin.on('data', (chunk) => {
-    input += chunk;
-  });
-  if (isTesting) {
-    input = 'John';
-  }
-  rl.write(`Your name is: ${input.trim()}`);
-}
-rl.on('close', () => console.log('This important software is now closing'));
+process.stdin.on('close', () =>  process.stdout.write('This important software is now closing\n'));
