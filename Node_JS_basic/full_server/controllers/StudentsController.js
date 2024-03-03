@@ -1,50 +1,56 @@
-import { readDatabase } from "../utils";
+import readDatabase from '../utils';
 
-const filePath = process.argv[2]
+const fs = require('fs');
+
+const dbPath = process.argv[2];
 
 class StudentsController {
-    static async getAllStudents(req, res) {
-        try {
+  static getAllStudents(req, res) {
+    if (fs.existsSync(dbPath)) {
+      readDatabase(dbPath)
+        .then((data) => {
+          const info = [];
 
-            const data = await readDatabase(filePath)
+          info.push('This is the list of our students');
 
-            if (!filePath) {
-                return res.status(500).send('DATABASE_FILEPATH environment variable not set');
+          for (const field in data) {
+            if (field) {
+              info.push(`Number os students in ${field}: ${data[field].length}.  List: ${data[field].join(', ')}`);
             }
-
-            let output = 'This is the list of our students\n'
-            for (const [field, { count, list }] of Object.entries(data)) {
-                output += `${field}: ${count}. List: ${list.join(', ')}\n`;
-            }
-
-            return res.status(200).send(output)
-        } catch (err) {
-            console.error(err);
-            return res.status(500).send('Cannot load the database');
-        }
+          }
+          res.setHeader('Content-Type', 'text/plain');
+          res.status(200).send(`${info.join('\n')}`);
+        })
+        .catch((err) => {
+          res.setHeader('Content-Type', 'text/plain');
+          res.status(500).send(err.message);
+        });
+    } else {
+      res.setHeader('Content-Type', 'text/plain');
+      res.status(200).send('Cannot load the database');
     }
+  }
 
-    static async getAllStudentsByMajor(req, res) {
-        try {
-            if (!filePath) {
-                return res.status(500).send('DATABASE_FILEPATH environment variable not set')
-            }
-
-            const { major } = req.params;
-            if (major !== 'CS' && major !== 'SWE') {
-                return res.status(500).send('Major parameter must be CS or SWE')
-            }
-
-            const data = await readDatabase(filePath);
-            const students = data[major] || [];
-
-            let output = `List: ${students.join(', ')}`;
-            return res.status(200).send(output)
-        } catch (err) {
-            console.error(err);
-            return res.status(500).send('Major parameter must be CS or SWE');
-        }
+  static getAllStudentsByMajor(req, res) {
+    const majors = ['CS', 'SWE'];
+    if (majors.includes(req.params.major)) {
+      if (fs.existsSync(dbPath)) {
+        readDatabase(dbPath)
+          .then((data) => {
+            const students = data[req.params.major].join(', ');
+            res.setHeader('Content-Type', 'text/plain');
+            res.status(200).send(`List: ${students}`);
+          });
+      } else {
+        res.setHeader('Content-Type', 'text/plain');
+        res.status(500).send('Cannot load the database');
+      }
+    } else {
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'text/plain');
+      res.send('Major parameter must be CS or SWE');
     }
+  }
 }
 
-module.exports = StudentsController
+module.exports = StudentsController;

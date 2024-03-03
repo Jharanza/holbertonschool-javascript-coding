@@ -1,7 +1,8 @@
 class AppController {
-    static getHomepage(req, res) {
-        return res.status(200).send('Hello Holberton School!');
-    };
+  static getHomepage(req, res) {
+    res.setHeader('Content-Type', 'text/plain');
+    res.status(200).send('Hello Holberton School!');
+  }
 }
 
-module.exports = AppController
+module.exports = AppController;

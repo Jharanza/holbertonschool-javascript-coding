@@ -1,23 +1,37 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 
 function readDatabase(filePath) {
-    return fs.readFile(filePath, 'utf-8')
-        .then((data) => {
-            const students = data.split('\n').map((line) => line.split(','));
-            const studentsByField = students.reduce((acc, student) => {
-                const field = student[0];
-                acc[field] = acc[field] || [];
-                acc[field].push(student[1]);
-                return acc
-            }, {});
-            return Object.fromEntries(
-                Object.entries(studentsByField).map(([field, names]) => [
-                    field,
-                    { count: names.length, list: names.sort() }
-                ])
-            )
-        })
-        .catch(err => Promise.reject(err));
+  return new Promise((res, rej) => {
+    if (fs.existsSync(filePath)) {
+      fs.readFile(filePath, (err, data) => {
+        if (err) rej(err);
+        else {
+          const studentsByMajor = {};
+
+          let students = data.toString().split('\n').map((elem) => elem.split(','));
+          students = students.slice(1);
+
+          const fields = {};
+
+          students.forEach((student) => {
+            fields[student[student.length - 1]] = (fields[student[student.length - 1]] || 0) + 1;
+          });
+
+          for (const field in fields) {
+            if (field) {
+              const result = students
+                .filter((stud) => stud[stud.length - 1] === field)
+                .map((element) => element[0]);
+              studentsByMajor[field] = result;
+            }
+          }
+          res(studentsByMajor);
+        }
+      });
+    } else {
+      throw new Error('Cannot load the database');
+    }
+  });
 }
 
-module.exports = readDatabase
+module.exports = readDatabase;
